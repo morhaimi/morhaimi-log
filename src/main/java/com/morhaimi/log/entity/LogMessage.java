@@ -41,10 +41,6 @@ public class LogMessage {
      */
     private String message;
     /**
-     * 阅读状态：1.未读，2.已读
-     */
-    private Integer readState;
-    /**
      * 时间信息
      */
     private LocalDateTime dateInfo;

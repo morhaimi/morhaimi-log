@@ -1,35 +1,74 @@
 package com.morhaimi.log.mapper;
 
 import com.morhaimi.log.entity.LogMessage;
-import org.apache.ibatis.annotations.Param;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
  * @author xxl
- * @date 2021/9/27 18:32
+ * @date 2022/9/23
  */
 @Repository
-public interface LogMessageMapper {
+public class LogMessageMapper extends BaseDB {
+
+    @Value("${checkTableExists}")
+    private String checkTableSql;
+
+    @Value("${createTable}")
+    private String createTable;
+
+    @Value("${insertLog}")
+    private String insertLog;
 
     /**
-     * 初始化表结构
-     */
-    void initTable();
-
-    /**
-     * 校验表是否存在
-     * @param dataBaseName
+     * 检查表结构是否存在
      * @param tableName
      * @return
      */
-    Integer checkTableExists(@Param("dataBaseName") String dataBaseName, @Param("tableName") String tableName);
+    @SneakyThrows
+    public Integer checkTableExists(String tableName) {
+        PreparedStatement preparedStatement = getConnection().prepareStatement(checkTableSql);
+        preparedStatement.setString(1, getDatabaseName());
+        preparedStatement.setString(2, tableName);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
 
     /**
-     * 写入日志
-     * @param logInfos
+     * 创建表结构
      */
-    void writeLogs(List<LogMessage> logInfos);
+    @SneakyThrows
+    public void initTable() {
+        PreparedStatement preparedStatement = getConnection().prepareStatement(createTable);
+        preparedStatement.execute();
+    }
+
+    @SneakyThrows
+    public void writeLogs(List<LogMessage> logInfos) {
+        if (logInfos.size() <= 0) {
+            return;
+        }
+        for (LogMessage logMessage : logInfos) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(insertLog);
+            preparedStatement.setString(1, logMessage.getThreadName());
+            preparedStatement.setString(2, logMessage.getIp());
+            preparedStatement.setString(3, logMessage.getLoggerName());
+            preparedStatement.setInt(4, logMessage.getLine());
+            preparedStatement.setString(5, logMessage.getLevel());
+            preparedStatement.setString(6, logMessage.getMessage());
+            preparedStatement.setLong(7, logMessage.getTimeStamp());
+            preparedStatement.setObject(8, logMessage.getDateInfo());
+            preparedStatement.executeUpdate();
+        }
+    }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 @Configuration
 @MapperScan("com.morhaimi.log.mapper")
 @ComponentScan(basePackages = {"cn.hutool.extra.spring"})
+@PropertySource({"classpath:sql.properties"})
 public class Application {
 
     @SneakyThrows

@@ -27,7 +27,6 @@ public class DBAppenderEncoder extends EncoderBase<LoggingEvent> {
         logInfo.setLoggerName(event.getLoggerName());
         logInfo.setLevel(event.getLevel().toString());
         logInfo.setIp(IPUtils.getLocalIp());
-        logInfo.setReadState(1);
         logInfo.setLine(event.getCallerData()[0].getLineNumber());
         logInfo.setDateInfo(LocalDateTimeUtil.of(event.getTimeStamp()));
         if(event.getThrowableProxy() != null){
