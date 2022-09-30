@@ -1,12 +1,8 @@
 package com.morhaimi.log;
 
-import lombok.SneakyThrows;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
  * @author xxl
@@ -16,10 +12,5 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 @MapperScan("com.morhaimi.log.mapper")
 @ComponentScan(basePackages = {"cn.hutool.extra.spring"})
 public class Application {
-
-    @SneakyThrows
-    public static Resource[] getMapperLocations() {
-        return new PathMatchingResourcePatternResolver().getResources("classpath:mapper/**/*.xml");
-    }
 
 }
