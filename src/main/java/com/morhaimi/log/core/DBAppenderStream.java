@@ -54,9 +54,7 @@ public class DBAppenderStream extends OutputStream {
                 writeCache.add(logInfo);
             }
 
-            if(logInfo.getMessage().contains("Shutting down")){
-                flush();
-            }
+            flush();
 
         } finally {
             lock.unlock();
