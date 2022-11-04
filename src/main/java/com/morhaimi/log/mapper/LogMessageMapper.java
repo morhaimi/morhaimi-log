@@ -41,9 +41,9 @@ public interface LogMessageMapper {
      * @return
      */
     @Select("SELECT\n" +
-            "            COUNT(1)\n" +
-            "        FROM INFORMATION_SCHEMA.TABLES\n" +
-            "        WHERE TABLE_SCHEMA = #{dataBaseName} AND TABLE_NAME = #{tableName}")
+            "   COUNT(1)\n" +
+            "FROM INFORMATION_SCHEMA.TABLES\n" +
+            "WHERE TABLE_SCHEMA = #{dataBaseName} AND TABLE_NAME = #{tableName}")
     Integer checkTableExists(@Param("dataBaseName") String dataBaseName, @Param("tableName") String tableName);
 
     /**
